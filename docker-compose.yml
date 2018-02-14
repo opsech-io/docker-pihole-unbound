@@ -25,9 +25,10 @@ services:
       - ./entrypoints/:/entrypoints:z
       - /run
     ports:
-      -  5333:53/tcp
-      -  5333:53/udp
+      -  53:53/tcp
+      -  53:53/udp
       -  80:80
+    #network_mode: host
     networks:
       - unbound_net
     depends_on:
