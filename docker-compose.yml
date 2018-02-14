@@ -1,0 +1,52 @@
+---
+version: '2'
+
+services:
+
+  unbound:
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-unbound
+    image: unbound
+    dns: 127.0.0.1
+    networks:
+      unbound_net:
+        # ipv4_address: 172.19.53.53
+
+  pihole:
+    restart: always
+    image: diginc/pi-hole:latest
+    entrypoint: /entrypoints/pihole.sh
+    hostname: pi.hole
+    volumes:
+      - pihole-config:/etc/pihole:Z
+      - pihole-dnsmasq:/etc/dnsmasq.d:Z
+      - ./entrypoints/:/entrypoints:z
+      - /run
+    ports:
+      -  5333:53/tcp
+      -  5333:53/udp
+      -  80:80
+    networks:
+      - unbound_net
+    depends_on:
+      - unbound
+    environment:
+      TZ: America/New_York
+      ServerIP:
+      DNS1: unbound
+      DNS2: unbound
+      LIGHTHTTPD_ENABLED: 'true'
+      TERM: xterm-256color
+
+networks:
+  unbound_net:
+    # ipam:
+    #   driver: default
+    #   config:
+    #     - subnet: 172.19.53.0/24
+
+volumes:
+  pihole-config:
+  pihole-dnsmasq:
