@@ -40,6 +40,8 @@ services:
       DNS2: unbound
       LIGHTHTTPD_ENABLED: 'true'
       TERM: xterm-256color
+      # Leave blank for default random pw, or set here
+      WEBPASSWORD:
 
 networks:
   unbound_net:
