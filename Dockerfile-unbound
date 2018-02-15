@@ -3,7 +3,7 @@ FROM alpine:latest
 RUN apk --no-cache add unbound openssl wget dnssec-root
 
 #Debugging
-RUN apk --no-cache add iproute2 bind-tools tcpdump
+#RUN apk --no-cache add iproute2 bind-tools tcpdump
 
 RUN printf '%s\n' \
     "include: /etc/unbound/conf.d/*.conf" \
@@ -21,4 +21,4 @@ EXPOSE 53/udp 53/tcp
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 
-CMD [ "/usr/sbin/unbound", "-dvv" ]
+CMD [ "/usr/sbin/unbound", "-d" ]
